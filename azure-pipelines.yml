@@ -21,8 +21,8 @@ steps:
         #Force parameter is used copy-item to overwrite any existing files
 
     script: |
-		$sourcepath=$(Build.SourcesDirectory)/reports
-		$files=$(git diff $sourcepath HEAD HEAD~ --name-only);
+	$sourcepath=$(Build.SourcesDirectory)/reports
+	$files=$(git diff $sourcepath HEAD HEAD~ --name-only);
         $temp=$files-split ' '; 
         $count=$temp.Length;
         echo "Total changed $count files";
