@@ -36,8 +36,8 @@ steps:
 
     script: |
         $sourcepath="$(Build.SourcesDirectory)/reports"; 
-        $files=$(git diff HEAD HEAD~ --name-only $sourcepath/*);
-        $temp=$files-split ' '; 
+        $files=$(git diff HEAD HEAD~ --name-only $sourcepath/*) -join ',';
+        $temp=$files-split ','; 
         $count=$temp.Length;
         echo "Total changed $count files";
         For ($i=0; $i -lt $temp.Length; $i++)
