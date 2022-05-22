@@ -46,7 +46,7 @@ steps:
             echo "Modified File -  $name file";
             $filepath = ($name.Split('/'))[0..($name.Split('/').count-2)] -join '/';
             echo "File path - $filepath";          
-            $destFile = Join-Path $(Agent.TempDirectory)/$(Build.BuildId) $name;
+            $destFile = Join-Path $(Agent.TempDirectory)/$(Build.BuildId) $name.Split('/')[-1];
             $destinationpath = Split-Path $destFile ;
             echo "Destination path - $destinationpath";
             if (!(Test-Path -Path $destinationpath)) {
