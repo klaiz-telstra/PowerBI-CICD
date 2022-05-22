@@ -1,5 +1,17 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
+    exclude:
+      - "*"      
+
+  paths:
+    include:
+      - reports/*
+    exclude:
+      - "*"
+      
+      
 pool:
   vmImage: 'windows-latest'
 steps:
