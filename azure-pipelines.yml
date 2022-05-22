@@ -35,7 +35,7 @@ steps:
         #Force parameter is used copy-item to overwrite any existing files
 
     script: |
-        $global:ReportName ="Report";
+        Write-Host "##vso[task.setvariable variable=ReportName]Report"
         $sourcepath="$(Build.SourcesDirectory)/reports"; 
         $files=$(git diff HEAD HEAD~ --name-only $sourcepath/*) -join ',';
         $temp=$files-split ','; 
@@ -44,6 +44,8 @@ steps:
         For ($i=0; $i -lt $temp.Length; $i++)
         {
             $name=$temp[$i];
+            Write-Host "##vso[task.setvariable variable=ReportName]$name.Split('/')[-1]"
+
             echo "Modified File -  $name file";
             $filepath = ($name.Split('/'))[0..($name.Split('/').count-2)] -join '/';
             echo "File path - $filepath";          
@@ -54,8 +56,6 @@ steps:
                 New-Item $destinationpath -ItemType Directory
             }
             Copy-Item $name -Destination $destFile -Recurse -Force 
-     
-            Write-Host "##vso[task.setvariable variable=ReportName]$name.Split('/')[-1]"
         }
 
         Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
