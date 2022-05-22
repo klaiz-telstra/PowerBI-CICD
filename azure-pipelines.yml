@@ -1,15 +1,12 @@
 trigger:
   branches:
     include:
-      - main
-    exclude:
-      - "*"      
+      - main 
 
   paths:
     include:
       - reports/*
-    exclude:
-      - "*"
+
       
       
 pool:
