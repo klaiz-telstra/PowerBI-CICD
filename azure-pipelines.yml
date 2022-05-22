@@ -1,6 +1,15 @@
-trigger:
-- main
+# trigger:
+# - main
 
+trigger:
+  branches:
+    include:
+    - main
+    - releases/*
+  paths:
+    include:
+    - reports
+    
 pool:
   vmImage: 'windows-latest'
 steps:
