@@ -54,9 +54,11 @@ steps:
             }
             Copy-Item $name -Destination $destFile -Recurse -Force 
      
+            Write-Host "##vso[task.setvariable variable=ReportName]$name.Split('/')[-1]"
         }
 
         Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
+        Write-Host "ReportName=$(ReportName)"
         
         
 - task: ArchiveFiles@2
