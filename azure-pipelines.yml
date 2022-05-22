@@ -32,7 +32,9 @@ steps:
         #Once the folder structure is available in the destination, we then copy the file to that location using copy-item command
         #Force parameter is used copy-item to overwrite any existing files
 
-    script: $sourcepath=$(Build.SourcesDirectory)/reports; $files=$(git diff $sourcepath HEAD HEAD~ --name-only);
+    script: 
+        $sourcepath=$(Build.SourcesDirectory)/reports; 
+        $files=$(git diff $sourcepath HEAD HEAD~ --name-only);
         $temp=$files-split ' '; 
         $count=$temp.Length;
         echo "Total changed $count files";
