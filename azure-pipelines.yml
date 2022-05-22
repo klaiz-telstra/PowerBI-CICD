@@ -2,11 +2,17 @@
 # - main
 
 trigger:
-- main
-
-  paths:
+  branches:
     include:
-    - reports
+    - main
+    - releases/*
+    - feature/*
+    exclude:
+    - releases/old*
+    - feature/*-working
+#   paths:
+#     include:
+#     - docs/*.md
     
 pool:
   vmImage: 'windows-latest'
