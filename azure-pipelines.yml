@@ -1,6 +1,18 @@
-trigger:
-  -main
+# trigger:
+# - main
 
+trigger:
+  branches:
+    include:
+    - main
+    - releases/*
+    - feature/*
+    exclude:
+    - releases/old*
+    - feature/*-working
+  paths:
+    include:
+    - reports/*.pbix
     
 pool:
   vmImage: 'windows-latest'
@@ -24,7 +36,7 @@ steps:
 
     script: |
         $sourcepath="$(Build.SourcesDirectory)/reports"; 
-        $files=$(git diff $sourcepath HEAD HEAD~ --name-only);
+        $files=$(git diff HEAD HEAD~ --name-only);
         $temp=$files-split ' '; 
         $count=$temp.Length;
         echo "Total changed $count files";
