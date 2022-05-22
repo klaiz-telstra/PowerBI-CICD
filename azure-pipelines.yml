@@ -52,7 +52,7 @@ steps:
             if (!(Test-Path -Path $destinationpath)) {
                 New-Item $destinationpath -ItemType Directory
             }
-            Copy-Item $sourcepath/$name -Destination $destFile -Recurse -Force 
+            Copy-Item $name -Destination $destFile -Recurse -Force 
      
         }
 
