@@ -20,7 +20,9 @@ steps:
         #Once the folder structure is available in the destination, we then copy the file to that location using copy-item command
         #Force parameter is used copy-item to overwrite any existing files
 
-    script: $files=$(git diff HEAD HEAD~ --name-only);
+    script: |
+		$sourcepath=$(Build.SourcesDirectory)/reports
+		$files=$(git diff $sourcepath HEAD HEAD~ --name-only);
         $temp=$files-split ' '; 
         $count=$temp.Length;
         echo "Total changed $count files";
@@ -36,11 +38,13 @@ steps:
             if (!(Test-Path -Path $destinationpath)) {
                 New-Item $destinationpath -ItemType Directory
             }
-            Copy-Item $name -Destination $destFile -Recurse -Force 
+            Copy-Item $sourcepath/$name -Destination $destFile -Recurse -Force 
      
         }
 
-        Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force    
+        Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
+        
+        
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Agent.TempDirectory)/$(Build.BuildId)'
