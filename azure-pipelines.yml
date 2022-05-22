@@ -2,10 +2,8 @@
 # - main
 
 trigger:
-  branches:
-    include:
-    - main
-    - releases/*
+- main
+
   paths:
     include:
     - reports
