@@ -1,0 +1,71 @@
+trigger:
+  branches:
+    include:
+      - main
+    exclude:
+      - "*"      
+
+  paths:
+    include:
+      - reports/*
+    exclude:
+      - "*"
+      
+      
+pool:
+  vmImage: 'windows-latest'
+steps:
+
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(Build.SourcesDirectory)/reports'
+#     Contents: '**.pbix'
+#     TargetFolder: '$(Agent.TempDirectory)/$(Build.BuildId)'
+    
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+        #We fist check the latest modified files based on GIT DIFF command
+        #Then we loop through the files using files-split
+        #Next we split the file URL to get the file name and parent folder structure of the file separately
+        #Based on the file path, we check the path in output directory and create it if its not present
+        #Once the folder structure is available in the destination, we then copy the file to that location using copy-item command
+        #Force parameter is used copy-item to overwrite any existing files
+
+    script: |
+        $sourcepath="$(Build.SourcesDirectory)/reports"; 
+        $files=$(git diff $sourcepath HEAD HEAD~ --name-only);
+        $temp=$files-split ' '; 
+        $count=$temp.Length;
+        echo "Total changed $count files";
+        For ($i=0; $i -lt $temp.Length; $i++)
+        {
+            $name=$temp[$i];
+            echo "Modified File -  $name file";
+            $filepath = ($name.Split('/'))[0..($name.Split('/').count-2)] -join '/';
+            echo "File path - $filepath";          
+            $destFile = Join-Path $(Agent.TempDirectory)/$(Build.BuildId) $name;
+            $destinationpath = Split-Path $destFile ;
+            echo "Destination path - $destinationpath";
+            if (!(Test-Path -Path $destinationpath)) {
+                New-Item $destinationpath -ItemType Directory
+            }
+            Copy-Item $sourcepath/$name -Destination $destFile -Recurse -Force 
+     
+        }
+
+        Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
+        
+        
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Agent.TempDirectory)/$(Build.BuildId)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'PowerBIArtifact'
+    publishLocation: 'Container'
