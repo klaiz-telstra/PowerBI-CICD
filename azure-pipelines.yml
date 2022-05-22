@@ -59,7 +59,7 @@ steps:
         }
 
         Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
-        Write-Host "ReportName=$(ReportName)"
+        echo "ReportName=$(ReportName)"
         
         
 - task: ArchiveFiles@2
