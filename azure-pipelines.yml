@@ -57,7 +57,8 @@ steps:
 
         Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force;
         echo "files: $files";
-        echo "sub-folder: $temp[0].Split('/')[-2]";
+        $name_first=$temp[0];
+        echo "sub-folder: $name_first.Split('/')[-2]";
         
         
 - task: ArchiveFiles@2
