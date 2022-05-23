@@ -57,8 +57,10 @@ steps:
 
         Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force;
         echo "files: $files";
-        $name_first=$temp[0].Split('/')[-2];
-        echo "sub-folder: $name_first";
+        $report_type=$temp[0].Split('/')[-2];
+        echo "Report Type: $report_type";
+
+        Write-Host "##vso[build.addbuildtag]$report_type";
         
         
 - task: ArchiveFiles@2
