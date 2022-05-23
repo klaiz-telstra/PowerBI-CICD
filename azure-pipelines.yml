@@ -55,7 +55,8 @@ steps:
             Copy-Item $name -Destination $destFile -Recurse -Force 
         }
 
-        Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force
+        Get-ChildItem -Path $(Build.ArtifactStagingDirectory) -Recurse -Force;
+        echo "files: $files";
         
         
 - task: ArchiveFiles@2
