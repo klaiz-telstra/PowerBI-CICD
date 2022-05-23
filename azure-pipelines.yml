@@ -12,7 +12,7 @@ trigger:
     - feature/*-working
   paths:
     include:
-    - reports/*.pbix
+    - reports/*/*.pbix
     
 pool:
   vmImage: 'windows-latest'
